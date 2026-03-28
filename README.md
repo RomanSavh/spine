@@ -73,7 +73,11 @@ Full API docs at `/swagger-ui/`.
 
 MCP endpoint at `/mcp` (Streamable HTTP / SSE transport).
 
-Available tools: `list_services`, `get_service`, `list_tables`, `get_table`, `list_queues`, `get_queue`, `get_proto`, `get_http_contract`, `get_context`, `get_dependencies`, `search`.
+**Read tools:** `list_services`, `get_service`, `list_tables`, `get_table`, `list_queues`, `get_queue`, `get_proto`, `get_http_contract`, `get_context`, `get_dependencies`, `search`.
+
+**Write tools:** `register_service`, `update_service`, `delete_service`, `register_table`, `update_table`, `delete_table`, `register_queue`, `update_queue`, `delete_queue`, `register_proto`, `update_proto`, `delete_proto`, `register_http_contract`, `update_http_contract`, `delete_http_contract`.
+
+See [MCP.md](MCP.md) for full specification.
 
 Connect from any MCP client:
 

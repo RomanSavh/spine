@@ -2,7 +2,7 @@
 
 ## Overview
 
-Spine exposes an MCP (Model Context Protocol) server over Streamable HTTP (SSE) transport at `/mcp`. AI agents use it to query system architecture knowledge — services, database schemas, queue contracts, gRPC/HTTP APIs, and service dependencies.
+Spine exposes an MCP (Model Context Protocol) server over Streamable HTTP (SSE) transport at `/mcp`. AI agents use it to query and register system architecture knowledge — services, database schemas, queue contracts, gRPC/HTTP APIs, and service dependencies.
 
 **Endpoint:** `http://<host>:<port>/mcp`
 **Transport:** Streamable HTTP (Server-Sent Events)
@@ -27,7 +27,7 @@ Spine exposes an MCP (Model Context Protocol) server over Streamable HTTP (SSE) 
   "name": "rmcp",
   "version": "1.3.0",
   "capabilities": { "tools": {} },
-  "instructions": "Spine is a system knowledge registry. Use it to understand microservice architecture, database schemas, queue contracts, gRPC/HTTP APIs, and service dependencies."
+  "instructions": "Spine is a system knowledge registry. Use it to understand and register microservice architecture, database schemas, queue contracts, gRPC/HTTP APIs, and service dependencies."
 }
 ```
 
@@ -276,6 +276,200 @@ Semantic search across all entities (services, tables, queues, protos, HTTP cont
 ```
 
 **Note:** Requires the embedding service (`spine-embed`) to be running. Returns an error if unavailable.
+
+## Write Tools
+
+All write tools automatically update embeddings for semantic search.
+
+---
+
+### register_service
+
+Register a new service. Provide name, description, and relationship fields.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `name` | string | yes | Unique service name |
+| `description` | string | yes | What the service does |
+| `github_repo` | string | no | Link to source repository |
+| `grpc_servers` | string[] | no | gRPC servers this service implements |
+| `grpc_clients` | string[] | no | gRPC servers this service calls |
+| `http_server` | boolean | no | Whether it exposes an HTTP API |
+| `http_clients` | string[] | no | Services it makes HTTP calls to |
+| `queue_publishers` | string[] | no | Queues/topics this service publishes to |
+| `queue_subscribers` | string[] | no | Queues/topics this service subscribes to |
+| `tables` | string[] | no | Database tables this service owns |
+
+**Returns:** Confirmation message + full service JSON.
+
+---
+
+### update_service
+
+Update an existing service. All fields are replaced.
+
+**Parameters:** Same as `register_service`.
+
+---
+
+### delete_service
+
+Delete a service by name.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `name` | string | yes | Service name |
+
+**Returns:** Confirmation message.
+
+---
+
+### register_table
+
+Register a new database table with its DDL schema.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `name` | string | yes | Table name |
+| `database` | string | yes | Which database it belongs to |
+| `owner` | string | yes | Which service owns this table |
+| `description` | string | yes | What data it holds |
+| `ddl` | string | yes | Raw PostgreSQL CREATE TABLE statement |
+
+**Returns:** Confirmation message + full table JSON.
+
+---
+
+### update_table
+
+Update an existing table. All fields are replaced.
+
+**Parameters:** Same as `register_table`.
+
+---
+
+### delete_table
+
+Delete a table by name.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `name` | string | yes | Table name |
+
+---
+
+### register_queue
+
+Register a new queue contract with its message schema.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `name` | string | yes | Queue/topic name |
+| `description` | string | yes | What events flow through it |
+| `schema` | object | yes | Message schema (see below) |
+
+**`schema` object:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `name` | string | yes | Schema/event type name |
+| `fields` | array | yes | Typed fields: `{name, type, description}` |
+| `notes` | string | no | Additional notes |
+
+**Returns:** Confirmation message + full queue contract JSON.
+
+---
+
+### update_queue
+
+Update an existing queue contract. All fields are replaced.
+
+**Parameters:** Same as `register_queue`.
+
+---
+
+### delete_queue
+
+Delete a queue contract by name.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `name` | string | yes | Queue name |
+
+---
+
+### register_proto
+
+Register a new proto contract with raw .proto content.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `server` | string | yes | gRPC server name |
+| `description` | string | yes | What the service does |
+| `proto_raw` | string | yes | Raw .proto file content |
+
+**Returns:** Confirmation message + full proto contract JSON.
+
+---
+
+### update_proto
+
+Update an existing proto contract. All fields are replaced.
+
+**Parameters:** Same as `register_proto`.
+
+---
+
+### delete_proto
+
+Delete a proto contract by gRPC server name.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `server` | string | yes | gRPC server name |
+
+---
+
+### register_http_contract
+
+Register a new HTTP contract with OpenAPI/Swagger spec.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `service` | string | yes | Service name |
+| `description` | string | yes | What the API does |
+| `spec_raw` | string | yes | Raw OpenAPI/Swagger spec content |
+
+**Returns:** Confirmation message + full HTTP contract JSON.
+
+---
+
+### update_http_contract
+
+Update an existing HTTP contract. All fields are replaced.
+
+**Parameters:** Same as `register_http_contract`.
+
+---
+
+### delete_http_contract
+
+Delete an HTTP contract by service name.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `service` | string | yes | Service name |
+
+---
 
 ## Entity Types
 
