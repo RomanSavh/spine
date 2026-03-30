@@ -772,6 +772,7 @@ impl SpineMcp {
     }
 }
 
+#[rmcp::tool_handler]
 impl ServerHandler for SpineMcp {
     fn get_info(&self) -> InitializeResult {
         InitializeResult::new(ServerCapabilities::builder().enable_tools().build())
