@@ -34,7 +34,7 @@ The embedding model downloads on first startup (~500MB) and is cached in a Docke
 # Start the embedding service
 cd embed-service
 pip install -r requirements.txt
-uvicorn main:app --port 8100 &
+uvicorn main:app --port 8000 &
 
 # Start Spine
 cargo run
@@ -46,7 +46,7 @@ cargo run
 |----------|---------|-------------|
 | `SPINE_PORT` | `3000` | HTTP server port |
 | `SPINE_DB_PATH` | `spine.db` | SQLite database path |
-| `SPINE_EMBED_URL` | `http://localhost:8100` | Embedding service URL |
+| `SPINE_EMBED_URL` | `http://localhost:8000` | Embedding service URL |
 
 ## API
 

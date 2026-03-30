@@ -423,7 +423,11 @@ impl SpineMcp {
         let queue_contracts = queries::get_queues_by_names(&db, &queue_names)
             .map_err(|e| ErrorData::internal_error(e.to_string(), None))?;
 
-        let proto_contracts = queries::get_protos_by_servers(&db, &svc.grpc_servers)
+        let mut grpc_names: Vec<String> = svc.grpc_servers.clone();
+        grpc_names.extend(svc.grpc_clients.clone());
+        grpc_names.sort();
+        grpc_names.dedup();
+        let proto_contracts = queries::get_protos_by_servers(&db, &grpc_names)
             .map_err(|e| ErrorData::internal_error(e.to_string(), None))?;
 
         let http_contracts: Vec<models::HttpContract> = if svc.http_server {

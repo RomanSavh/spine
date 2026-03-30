@@ -40,7 +40,11 @@ pub async fn get_context(
     queue_names.dedup();
     let queue_contracts = queries::get_queues_by_names(&db, &queue_names)?;
 
-    let proto_contracts = queries::get_protos_by_servers(&db, &service.grpc_servers)?;
+    let mut grpc_names: Vec<String> = service.grpc_servers.clone();
+    grpc_names.extend(service.grpc_clients.clone());
+    grpc_names.sort();
+    grpc_names.dedup();
+    let proto_contracts = queries::get_protos_by_servers(&db, &grpc_names)?;
 
     let http_contracts = if service.http_server {
         queries::get_http_contract(&db, &service.name)?
