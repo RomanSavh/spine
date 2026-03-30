@@ -24,7 +24,10 @@ mod tables;
         description = "A read-only-first registry of system architecture knowledge for AI agents. \
                        Stores services, database tables, queue contracts, proto contracts, and HTTP contracts. \
                        Supports semantic search via embeddings.",
-        version = "0.1.0"
+        version = "0.2.0"
+    ),
+    servers(
+        (url = "/", description = "Current instance"),
     ),
     paths(
         services::list, services::get_one, services::create, services::update, services::delete,
