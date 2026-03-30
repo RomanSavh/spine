@@ -8,7 +8,7 @@ use crate::error::AppError;
 use crate::models::{Table, TableSummary};
 use crate::AppState;
 
-#[utoipa::path(get, path = "/tables", tag = "Tables",
+#[utoipa::path(get, path = "/tables", tag = "Tables", operation_id = "list_tables",
     responses((status = 200, description = "List all tables", body = Vec<TableSummary>))
 )]
 pub async fn list(State(state): State<AppState>) -> Result<Json<Vec<TableSummary>>, AppError> {
@@ -16,7 +16,7 @@ pub async fn list(State(state): State<AppState>) -> Result<Json<Vec<TableSummary
     Ok(Json(queries::list_tables(&db)?))
 }
 
-#[utoipa::path(get, path = "/tables/{name}", tag = "Tables",
+#[utoipa::path(get, path = "/tables/{name}", tag = "Tables", operation_id = "get_table",
     params(("name" = String, Path, description = "Table name")),
     responses(
         (status = 200, description = "Table found", body = Table),
@@ -32,7 +32,7 @@ pub async fn get_one(
     Ok(Json(t))
 }
 
-#[utoipa::path(post, path = "/tables", tag = "Tables",
+#[utoipa::path(post, path = "/tables", tag = "Tables", operation_id = "create_table",
     request_body = Table,
     responses((status = 201, description = "Table created", body = Table))
 )]
@@ -48,7 +48,7 @@ pub async fn create(
     Ok((StatusCode::CREATED, Json(t)))
 }
 
-#[utoipa::path(put, path = "/tables/{name}", tag = "Tables",
+#[utoipa::path(put, path = "/tables/{name}", tag = "Tables", operation_id = "update_table",
     params(("name" = String, Path, description = "Table name")),
     request_body = Table,
     responses(
@@ -69,7 +69,7 @@ pub async fn update(
     Ok(Json(t))
 }
 
-#[utoipa::path(delete, path = "/tables/{name}", tag = "Tables",
+#[utoipa::path(delete, path = "/tables/{name}", tag = "Tables", operation_id = "delete_table",
     params(("name" = String, Path, description = "Table name")),
     responses(
         (status = 204, description = "Table deleted"),

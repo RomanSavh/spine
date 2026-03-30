@@ -8,7 +8,7 @@ use crate::error::AppError;
 use crate::models::{ProtoContract, ProtoSummary};
 use crate::AppState;
 
-#[utoipa::path(get, path = "/protos", tag = "Proto Contracts",
+#[utoipa::path(get, path = "/protos", tag = "Proto Contracts", operation_id = "list_protos",
     responses((status = 200, description = "List all proto contracts", body = Vec<ProtoSummary>))
 )]
 pub async fn list(State(state): State<AppState>) -> Result<Json<Vec<ProtoSummary>>, AppError> {
@@ -16,7 +16,7 @@ pub async fn list(State(state): State<AppState>) -> Result<Json<Vec<ProtoSummary
     Ok(Json(queries::list_protos(&db)?))
 }
 
-#[utoipa::path(get, path = "/protos/{server}", tag = "Proto Contracts",
+#[utoipa::path(get, path = "/protos/{server}", tag = "Proto Contracts", operation_id = "get_proto",
     params(("server" = String, Path, description = "gRPC server name")),
     responses(
         (status = 200, description = "Proto contract found", body = ProtoContract),
@@ -32,7 +32,7 @@ pub async fn get_one(
     Ok(Json(p))
 }
 
-#[utoipa::path(post, path = "/protos", tag = "Proto Contracts",
+#[utoipa::path(post, path = "/protos", tag = "Proto Contracts", operation_id = "create_proto",
     request_body = ProtoContract,
     responses((status = 201, description = "Proto contract created", body = ProtoContract))
 )]
@@ -48,7 +48,7 @@ pub async fn create(
     Ok((StatusCode::CREATED, Json(p)))
 }
 
-#[utoipa::path(put, path = "/protos/{server}", tag = "Proto Contracts",
+#[utoipa::path(put, path = "/protos/{server}", tag = "Proto Contracts", operation_id = "update_proto",
     params(("server" = String, Path, description = "gRPC server name")),
     request_body = ProtoContract,
     responses(
@@ -69,7 +69,7 @@ pub async fn update(
     Ok(Json(p))
 }
 
-#[utoipa::path(delete, path = "/protos/{server}", tag = "Proto Contracts",
+#[utoipa::path(delete, path = "/protos/{server}", tag = "Proto Contracts", operation_id = "delete_proto",
     params(("server" = String, Path, description = "gRPC server name")),
     responses(
         (status = 204, description = "Proto contract deleted"),

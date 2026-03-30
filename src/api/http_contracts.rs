@@ -8,7 +8,7 @@ use crate::error::AppError;
 use crate::models::{HttpContract, HttpContractSummary};
 use crate::AppState;
 
-#[utoipa::path(get, path = "/http-contracts", tag = "HTTP Contracts",
+#[utoipa::path(get, path = "/http-contracts", tag = "HTTP Contracts", operation_id = "list_http_contracts",
     responses((status = 200, description = "List all HTTP contracts", body = Vec<HttpContractSummary>))
 )]
 pub async fn list(
@@ -18,7 +18,7 @@ pub async fn list(
     Ok(Json(queries::list_http_contracts(&db)?))
 }
 
-#[utoipa::path(get, path = "/http-contracts/{service}", tag = "HTTP Contracts",
+#[utoipa::path(get, path = "/http-contracts/{service}", tag = "HTTP Contracts", operation_id = "get_http_contract",
     params(("service" = String, Path, description = "Service name")),
     responses(
         (status = 200, description = "HTTP contract found", body = HttpContract),
@@ -34,7 +34,7 @@ pub async fn get_one(
     Ok(Json(h))
 }
 
-#[utoipa::path(post, path = "/http-contracts", tag = "HTTP Contracts",
+#[utoipa::path(post, path = "/http-contracts", tag = "HTTP Contracts", operation_id = "create_http_contract",
     request_body = HttpContract,
     responses((status = 201, description = "HTTP contract created", body = HttpContract))
 )]
@@ -50,7 +50,7 @@ pub async fn create(
     Ok((StatusCode::CREATED, Json(h)))
 }
 
-#[utoipa::path(put, path = "/http-contracts/{service}", tag = "HTTP Contracts",
+#[utoipa::path(put, path = "/http-contracts/{service}", tag = "HTTP Contracts", operation_id = "update_http_contract",
     params(("service" = String, Path, description = "Service name")),
     request_body = HttpContract,
     responses(
@@ -71,7 +71,7 @@ pub async fn update(
     Ok(Json(h))
 }
 
-#[utoipa::path(delete, path = "/http-contracts/{service}", tag = "HTTP Contracts",
+#[utoipa::path(delete, path = "/http-contracts/{service}", tag = "HTTP Contracts", operation_id = "delete_http_contract",
     params(("service" = String, Path, description = "Service name")),
     responses(
         (status = 204, description = "HTTP contract deleted"),

@@ -8,7 +8,7 @@ use crate::error::AppError;
 use crate::models::{QueueContract, QueueSummary};
 use crate::AppState;
 
-#[utoipa::path(get, path = "/queues", tag = "Queues",
+#[utoipa::path(get, path = "/queues", tag = "Queues", operation_id = "list_queues",
     responses((status = 200, description = "List all queue contracts", body = Vec<QueueSummary>))
 )]
 pub async fn list(State(state): State<AppState>) -> Result<Json<Vec<QueueSummary>>, AppError> {
@@ -16,7 +16,7 @@ pub async fn list(State(state): State<AppState>) -> Result<Json<Vec<QueueSummary
     Ok(Json(queries::list_queues(&db)?))
 }
 
-#[utoipa::path(get, path = "/queues/{name}", tag = "Queues",
+#[utoipa::path(get, path = "/queues/{name}", tag = "Queues", operation_id = "get_queue",
     params(("name" = String, Path, description = "Queue name")),
     responses(
         (status = 200, description = "Queue contract found", body = QueueContract),
@@ -32,7 +32,7 @@ pub async fn get_one(
     Ok(Json(q))
 }
 
-#[utoipa::path(post, path = "/queues", tag = "Queues",
+#[utoipa::path(post, path = "/queues", tag = "Queues", operation_id = "create_queue",
     request_body = QueueContract,
     responses((status = 201, description = "Queue contract created", body = QueueContract))
 )]
@@ -48,7 +48,7 @@ pub async fn create(
     Ok((StatusCode::CREATED, Json(q)))
 }
 
-#[utoipa::path(put, path = "/queues/{name}", tag = "Queues",
+#[utoipa::path(put, path = "/queues/{name}", tag = "Queues", operation_id = "update_queue",
     params(("name" = String, Path, description = "Queue name")),
     request_body = QueueContract,
     responses(
@@ -69,7 +69,7 @@ pub async fn update(
     Ok(Json(q))
 }
 
-#[utoipa::path(delete, path = "/queues/{name}", tag = "Queues",
+#[utoipa::path(delete, path = "/queues/{name}", tag = "Queues", operation_id = "delete_queue",
     params(("name" = String, Path, description = "Queue name")),
     responses(
         (status = 204, description = "Queue contract deleted"),

@@ -8,7 +8,7 @@ use crate::error::AppError;
 use crate::models::{Service, ServiceSummary};
 use crate::AppState;
 
-#[utoipa::path(get, path = "/services", tag = "Services",
+#[utoipa::path(get, path = "/services", tag = "Services", operation_id = "list_services",
     responses((status = 200, description = "List all services", body = Vec<ServiceSummary>))
 )]
 pub async fn list(State(state): State<AppState>) -> Result<Json<Vec<ServiceSummary>>, AppError> {
@@ -17,7 +17,7 @@ pub async fn list(State(state): State<AppState>) -> Result<Json<Vec<ServiceSumma
     Ok(Json(services))
 }
 
-#[utoipa::path(get, path = "/services/{name}", tag = "Services",
+#[utoipa::path(get, path = "/services/{name}", tag = "Services", operation_id = "get_service",
     params(("name" = String, Path, description = "Service name")),
     responses(
         (status = 200, description = "Service found", body = Service),
@@ -33,7 +33,7 @@ pub async fn get_one(
     Ok(Json(svc))
 }
 
-#[utoipa::path(post, path = "/services", tag = "Services",
+#[utoipa::path(post, path = "/services", tag = "Services", operation_id = "create_service",
     request_body = Service,
     responses((status = 201, description = "Service created", body = Service))
 )]
@@ -49,7 +49,7 @@ pub async fn create(
     Ok((StatusCode::CREATED, Json(svc)))
 }
 
-#[utoipa::path(put, path = "/services/{name}", tag = "Services",
+#[utoipa::path(put, path = "/services/{name}", tag = "Services", operation_id = "update_service",
     params(("name" = String, Path, description = "Service name")),
     request_body = Service,
     responses(
@@ -70,7 +70,7 @@ pub async fn update(
     Ok(Json(svc))
 }
 
-#[utoipa::path(delete, path = "/services/{name}", tag = "Services",
+#[utoipa::path(delete, path = "/services/{name}", tag = "Services", operation_id = "delete_service",
     params(("name" = String, Path, description = "Service name")),
     responses(
         (status = 204, description = "Service deleted"),
