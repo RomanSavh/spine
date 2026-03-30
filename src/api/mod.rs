@@ -27,7 +27,8 @@ mod tables;
         version = "0.2.0"
     ),
     servers(
-        (url = "/", description = "Current instance"),
+        (url = "https://spine.yft.one", description = "QA"),
+        (url = "http://localhost:3000", description = "Local"),
     ),
     paths(
         services::list, services::get_one, services::create, services::update, services::delete,
